@@ -1,0 +1,467 @@
+:root {
+    --primary-color: #007bff;
+    --text-color: #333;
+    --border-color: #e7e7e7;
+    --light-background-color: #f8f9fa;
+    --text-muted-color: #6c757d;
+}
+
+/* General styles will go here */
+body {
+    color: var(--text-color);
+    font-family: sans-serif;
+    margin: 0;
+}
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+.main-header {
+    background: #fff;
+    padding: 20px 40px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-header .logo a {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
+.main-footer {
+    background: var(--light-background-color);
+    color: var(--text-muted-color);
+    padding: 20px 40px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+}
+
+.main-footer .footer-content p {
+    margin: 5px 0;
+}
+
+.main-footer .disclaimer {
+    font-size: 12px;
+    color: var(--text-muted-color);
+}
+
+/*--------------------------------------------------------------
+# Banner CTA
+--------------------------------------------------------------*/
+.banner-cta {
+    background: var(--primary-color);
+    color: white;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.banner-cta h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.banner-cta p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.banner-cta .cta-button {
+    background: white;
+    color: var(--primary-color);
+    padding: 15px 30px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.banner-cta .cta-button:hover {
+    background: #f0f0f0;
+    color: #0056b3; /* This could be a new variable, e.g., --primary-color-dark */
+}
+
+/*--------------------------------------------------------------
+# Banner Image
+--------------------------------------------------------------*/
+.banner-image {
+    height: 60vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.banner-image .banner-content {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    border-radius: 10px;
+}
+
+.banner-image h2 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.banner-image p {
+    font-size: 24px;
+}
+
+/*--------------------------------------------------------------
+# 3-Column Features
+--------------------------------------------------------------*/
+.features-section {
+    padding: 60px 40px;
+    background: var(--light-background-color);
+}
+
+.features-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.feature-item {
+    flex: 1;
+    text-align: center;
+}
+
+.feature-item h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+/*--------------------------------------------------------------
+# Team Bios
+--------------------------------------------------------------*/
+.team-bios-section {
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.team-bios-section .section-title {
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.team-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.team-member {
+    flex-basis: 280px;
+    text-align: center;
+}
+
+.team-member img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    object-fit: cover;
+}
+
+.team-member h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.team-member .title {
+    font-style: italic;
+    color: var(--text-muted-color);
+    margin-bottom: 10px;
+}
+
+/*--------------------------------------------------------------
+# Process Guide
+--------------------------------------------------------------*/
+.process-guide-section {
+    padding: 60px 40px;
+    background: var(--light-background-color);
+    text-align: center;
+}
+
+.process-guide-section .section-title {
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.process-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.process-step {
+    flex-basis: 220px;
+    position: relative;
+    padding-left: 30px;
+    text-align: left;
+}
+
+.process-step h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.process-list .process-step::before {
+    counter-increment: step-counter;
+    content: counter(step-counter);
+    position: absolute;
+    left: -10px;
+    top: -5px;
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--primary-color);
+    opacity: 0.3;
+}
+
+/*--------------------------------------------------------------
+# FAQ Accordion
+--------------------------------------------------------------*/
+.faq-section {
+    padding: 60px 40px;
+}
+
+.faq-section .section-title {
+    font-size: 36px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-question::after {
+    content: '+';
+    font-size: 28px;
+    color: var(--primary-color);
+    transition: transform 0.3s;
+}
+
+.faq-question[aria-expanded="true"]::after {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    padding-bottom: 20px;
+    line-height: 1.6;
+}
+
+/*--------------------------------------------------------------
+# Video Player
+--------------------------------------------------------------*/
+.video-player-section {
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.video-player-section .section-title {
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.video-container {
+    max-width: 800px;
+    margin: 0 auto 20px auto;
+}
+
+.video-container video {
+    width: 100%;
+    height: auto;
+}
+
+.transcript-toggle {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.transcript-content {
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: left;
+    line-height: 1.6;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+}
+
+/*--------------------------------------------------------------
+# Image Gallery
+--------------------------------------------------------------*/
+.image-gallery-section {
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.image-gallery-section .section-title {
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.gallery-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.main-image img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.thumbnail-strip {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.thumbnail {
+    width: 100px;
+    height: 75px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.thumbnail:hover,
+.thumbnail.active {
+    border-color: var(--primary-color);
+}
+
+/*--------------------------------------------------------------
+# Testimonial/Quote
+--------------------------------------------------------------*/
+.testimonial-section {
+    padding: 60px 40px;
+    background: var(--light-background-color);
+    text-align: center;
+}
+
+.testimonial-section .section-title {
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.testimonial-quote {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0;
+    border: none;
+}
+
+.testimonial-quote p {
+    font-size: 24px;
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.testimonial-quote footer {
+    font-size: 18px;
+    color: var(--text-muted-color);
+}
+
+/*--------------------------------------------------------------
+# Component Library Styles
+--------------------------------------------------------------*/
+#component-library-container {
+    padding: 40px;
+}
+
+#component-library-container h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.component-display {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    margin-bottom: 60px;
+    overflow: hidden;
+}
+
+.component-display > h2 {
+    background: var(--light-background-color);
+    padding: 20px;
+    margin: 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.component-preview {
+    padding: 40px;
+}
+
+.code-container {
+    background: #2d2d2d;
+    color: white;
+    padding: 20px;
+    position: relative;
+}
+
+.code-container pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.copy-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.template-copy-button {
+    display: block;
+    margin-bottom: 40px;
+}
