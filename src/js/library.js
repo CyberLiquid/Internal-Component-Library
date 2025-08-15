@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Pre-fetch common resources
     Promise.all([
-        fetch('src/css/style.css').then(res => res.text()),
+        fetch('src/css/components.css').then(res => res.text()),
         fetch('src/components/header.html').then(res => res.text()),
         fetch('src/components/footer.html').then(res => res.text())
     ]).then(([css, header, footer]) => {
