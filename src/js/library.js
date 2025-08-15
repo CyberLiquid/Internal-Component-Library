@@ -1,135 +1,251 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const components = [
-        'header',
-        'footer',
-        'banner-cta',
-        'banner-image',
-        'features-3-column',
-        'team-bios',
-        'process-guide',
-        'testimonial-quote',
-        'faq-accordion',
-        'video-player-centered',
-        'image-gallery'
-    ];
+    // --- DATA SOURCE FOR ALL COMPONENTS ---
+    const components = {
+        'header': {
+            title: 'Header',
+            practices: `<ul><li>The logos are now inline SVGs, so they will always load correctly without external files.</li><li>The header is responsive and will hide the company logo on mobile to save space.</li></ul>`
+        },
+        'video-centered': {
+            title: 'Video - Centered',
+            practices: `<ul><li>Use an <strong>&lt;h2&gt;</strong> for the title unless this is the main hero section of the page, then use <strong>&lt;h1&gt;</strong>.</li><li>The transcript improves accessibility for users who are deaf or hard of hearing.</li></ul>`
+        },
+        'video-split-left': {
+            title: 'Video - Split Left',
+            practices: `<ul><li>Ideal for showcasing a feature and providing context next to it.</li><li>On mobile, the video stacks on top of the text content for a logical flow.</li></ul>`
+        },
+        'video-split-right': {
+            title: 'Video - Split Right',
+            practices: `<ul><li>Uses the exact same HTML as "Split Left" but with an added <strong>.reverse</strong> class on the &lt;section&gt; tag.</li></ul>`
+        },
+        'banner-full-width': {
+            title: 'Banner - Full Width',
+            practices: `<ul><li>Great for a primary call-to-action (CTA).</li></ul>`
+        },
+        'banner-fullscreen': {
+            title: 'Banner - Full Screen',
+            practices: `<ul><li>Use for a high-impact hero image. Keeps the same widescreen image on mobile.</li><li>The dark overlay (<strong>::before</strong> pseudo-element) ensures text is readable. Adjust its opacity (e.g., <strong>rgba(0,0,0,0.5)</strong>) as needed.</li></ul>`
+        },
+        'features-3-col': {
+            title: 'Features - 3 Column',
+            practices: `<ul><li>Clearly communicates key benefits at a glance.</li><li>Use simple, universally understood icons. SVG icons are recommended as they scale without losing quality.</li></ul>`
+        },
+        'team-bios': {
+            title: 'Team Bios',
+            practices: `<ul><li>Use high-quality, professional headshots for a consistent look.</li><li>Keep the bio text concise and engaging.</li></ul>`
+        },
+        'process-section': {
+            title: 'Step-by-Step Process',
+            practices: `<ul><li>Clearly and simply explain a workflow or process to the user.</li><li>This component stacks vertically on mobile for easy reading.</li></ul>`
+        },
+        'gallery-section': {
+            title: 'Image Gallery',
+            practices: `<ul><li>Ideal for showcasing product screenshots, portfolio items, or event photos.</li><li>Ensure all images have descriptive <strong>alt text</strong> for accessibility.</li></ul>`
+        },
+        'testimonial': {
+            title: 'Testimonial',
+            practices: `<ul><li>Builds social proof and trust. Use a real quote from a real customer if possible.</li><li>The <strong>&lt;blockquote&gt;</strong> and <strong>&lt;cite&gt;</strong> tags are semantically correct for this purpose.</li></ul>`
+        },
+        'faq': {
+            title: 'FAQ Accordion',
+            practices: `<ul><li>Saves space by hiding answers until they are needed.</li><li>The use of <strong>&lt;button&gt;</strong> and ARIA attributes (aria-expanded, aria-controls) is critical for accessibility.</li></ul>`
+        },
+        'footer': {
+            title: 'Footer',
+            practices: `<ul><li>Keep disclaimer text concise. Link to full policies like "Terms of Service" or "Privacy Policy".</li><li>The logo is a styled SVG, ensuring it always loads and looks correct.</li></ul>`
+        }
+    };
 
-    const libraryContainer = document.getElementById('component-library');
-    const pageTemplateUrl = 'template.html';
+    let componentStyles = '';
+    let headerHtml = '';
+    let footerHtml = '';
 
-    // Add "Copy Full Page Template" button
-    const templateButton = document.createElement('button');
-    templateButton.textContent = 'Copy Full Page Template';
-    templateButton.classList.add('copy-button', 'template-copy-button');
-    templateButton.addEventListener('click', () => copyUrlToClipboard(pageTemplateUrl, templateButton));
-    libraryContainer.before(templateButton);
+    // Pre-fetch common resources
+    Promise.all([
+        fetch('src/css/style.css').then(res => res.text()),
+        fetch('src/components/header.html').then(res => res.text()),
+        fetch('src/components/footer.html').then(res => res.text())
+    ]).then(([css, header, footer]) => {
+        componentStyles = css;
+        headerHtml = header;
+        footerHtml = footer;
+    }).catch(error => console.error("Error pre-fetching resources:", error));
 
 
-    components.forEach(componentName => {
-        const url = `src/components/${componentName}.html`;
-        fetch(url)
-            .then(response => response.text())
-            .then(html => {
-                const section = document.createElement('section');
-                section.classList.add('component-display');
-
-                const title = document.createElement('h2');
-                title.textContent = componentName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                section.appendChild(title);
-
-                const preview = document.createElement('div');
-                preview.classList.add('component-preview');
-                preview.innerHTML = html;
-                section.appendChild(preview);
-
-                const codeContainer = document.createElement('div');
-                codeContainer.classList.add('code-container');
-
-                const pre = document.createElement('pre');
-                const code = document.createElement('code');
-                code.textContent = html;
-                pre.appendChild(code);
-                codeContainer.appendChild(pre);
-
-                const copyButton = document.createElement('button');
-                copyButton.textContent = 'Copy HTML';
-                copyButton.classList.add('copy-button');
-                copyButton.addEventListener('click', () => copyToClipboard(html, copyButton));
-                codeContainer.appendChild(copyButton);
-
-                section.appendChild(codeContainer);
-
-                libraryContainer.appendChild(section);
-
-                // Re-initialize any scripts for the newly added components
-                initializeComponentScripts();
+    function initializeInteractiveElements(rootElement) {
+        rootElement.querySelectorAll('.transcript-toggle').forEach(button => {
+            button.addEventListener('click', function () {
+                const contentId = this.getAttribute('aria-controls');
+                const content = rootElement.querySelector('#' + contentId);
+                if (content) {
+                    const isHidden = content.hidden;
+                    content.hidden = !isHidden;
+                    this.setAttribute('aria-expanded', !isHidden);
+                    this.textContent = isHidden ? 'Show Transcript' : 'Hide Transcript';
+                }
             });
-    });
+        });
+        rootElement.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', function() {
+                const contentId = this.getAttribute('aria-controls');
+                const content = rootElement.querySelector('#' + contentId);
+                if (content) {
+                    const isHidden = content.hidden;
+                    content.hidden = !isHidden;
+                    this.setAttribute('aria-expanded', !isHidden);
+                }
+            });
+        });
+    }
 
-    function copyToClipboard(text, button) {
+    const links = document.querySelectorAll('.component-link');
+    const viewers = document.querySelectorAll('.component-viewer');
+    const welcomeMessage = document.getElementById('welcome-message');
+
+    function generateComponentHTML(component, html) {
+        const interactiveScript = `(${initializeInteractiveElements.toString()})(document.body)`;
+        const iframeSrcDoc = `
+            <html>
+                <head><style>${componentStyles}</style></head>
+                <body>${html}<script>${interactiveScript}<\/script></body>
+            </html>`.replace(/"/g, '&quot;');
+
+        return `
+            <h2>${component.title}</h2>
+            <h3>Best Practices:</h3>
+            <div class="best-practices">${component.practices}</div>
+            <h3>Preview:</h3>
+            <div class="preview-container">
+                <div class="preview-tabs">
+                    <button class="preview-tab active" data-target="desktop">Desktop</button>
+                    <button class="preview-tab" data-target="mobile">Mobile</button>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-pane active" id="desktop-preview">${html}</div>
+                    <div class="preview-pane" id="mobile-preview">
+                        <div class="mobile-preview-wrapper"><iframe src="about:blank" srcdoc="${iframeSrcDoc}"></iframe></div>
+                    </div>
+                </div>
+            </div>
+            <div class="component-details">
+                <div class="details-tabs">
+                    <button class="details-tab active" data-pane="html">HTML</button>
+                </div>
+                <div class="details-pane active" id="html-pane">
+                    <div class="component-code">
+                        <button class="copy-button" title="Copy code">Copy</button>
+                        <pre><code>${html.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre>
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    function copyTextToClipboard(text, button) {
         navigator.clipboard.writeText(text).then(() => {
             const originalText = button.textContent;
             button.textContent = 'Copied!';
             setTimeout(() => {
                 button.textContent = originalText;
             }, 2000);
+        }, () => {
+            button.textContent = 'Error';
         });
     }
 
-    function copyUrlToClipboard(url, button) {
-        fetch(url)
-            .then(response => response.text())
-            .then(text => copyToClipboard(text, button));
-    }
+    document.getElementById('copy-full-template').addEventListener('click', function(e) {
+        const pageTemplateWithCSS = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <style>
+${componentStyles}
+    </style>
+</head>
+<body>
+    ${headerHtml}
 
-    function initializeComponentScripts() {
-        // FAQ Accordion
-        const faqQuestions = document.querySelectorAll('.faq-question');
-        faqQuestions.forEach(button => {
-            if (button.dataset.initialized) return;
-            button.dataset.initialized = true;
-            button.addEventListener('click', () => {
-                const answerId = button.getAttribute('aria-controls');
-                const answer = document.getElementById(answerId);
-                const isExpanded = button.getAttribute('aria-expanded') === 'true';
+    <main>
+        <!-- Add your components here -->
 
-                button.setAttribute('aria-expanded', !isExpanded);
-                answer.hidden = isExpanded;
-            });
+    </main>
+
+    ${footerHtml}
+
+    <script>
+        (${initializeInteractiveElements.toString()})(document.body);
+    <\/script>
+</body>
+</html>`;
+        copyTextToClipboard(pageTemplateWithCSS, e.target);
+    });
+
+    links.forEach(link => {
+        link.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+
+            const componentKey = Object.keys(components).find(key => targetId.startsWith(key.split('-')[0]));
+            if (!componentKey) return;
+
+            const viewer = document.getElementById(componentKey);
+            if (!viewer) return;
+
+            welcomeMessage.style.display = 'none';
+            viewers.forEach(v => v.classList.remove('active'));
+            viewer.classList.add('active');
+            links.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+
+            const componentData = components[targetId];
+
+            try {
+                const response = await fetch(`src/components/${targetId}.html`);
+                if (!response.ok) throw new Error('Component not found');
+                const html = await response.text();
+
+                viewer.innerHTML = generateComponentHTML(componentData, html);
+                initializeInteractiveElements(viewer);
+            } catch (error) {
+                viewer.innerHTML = `<h2>Error loading component</h2><p>${error.message}</p>`;
+            }
         });
+    });
 
-        // Video Player Transcript
-        const transcriptToggles = document.querySelectorAll('.transcript-toggle');
-        transcriptToggles.forEach(button => {
-            if (button.dataset.initialized) return;
-            button.dataset.initialized = true;
-            button.addEventListener('click', () => {
-                const transcriptId = button.getAttribute('aria-controls');
-                const transcript = document.getElementById(transcriptId);
-                const isExpanded = button.getAttribute('aria-expanded') === 'true';
+    document.querySelector('.library-content').addEventListener('click', function(e) {
+        if (e.target.classList.contains('copy-button')) {
+            const pre = e.target.nextElementSibling;
+            const code = pre.querySelector('code').innerText;
+            copyTextToClipboard(code, e.target);
+        }
 
-                button.setAttribute('aria-expanded', !isExpanded);
-                transcript.hidden = isExpanded;
-                button.textContent = isExpanded ? 'Show Transcript' : 'Hide Transcript';
-            });
-        });
+        if (e.target.classList.contains('preview-tab')) {
+            const parentContainer = e.target.closest('.preview-container');
+            parentContainer.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+            parentContainer.querySelectorAll('.preview-pane').forEach(p => p.classList.remove('active'));
+            const targetPaneId = e.target.dataset.target + '-preview';
+            parentContainer.querySelector('#' + targetPaneId).classList.add('active');
+        }
+        if (e.target.classList.contains('details-tab')) {
+            const parentContainer = e.target.closest('.component-details');
+            parentContainer.querySelectorAll('.details-tab').forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+            parentContainer.querySelectorAll('.details-pane').forEach(p => p.classList.remove('active'));
+            const targetPaneId = e.target.dataset.pane + '-pane';
+            parentContainer.querySelector('#' + targetPaneId).classList.add('active');
+        }
+    });
 
-        // Image Gallery
-        const galleries = document.querySelectorAll('.image-gallery-section');
-        galleries.forEach(gallery => {
-            if (gallery.dataset.initialized) return;
-            gallery.dataset.initialized = true;
-
-            const thumbnails = gallery.querySelectorAll('.thumbnail');
-            const mainImage = gallery.querySelector('.main-image img');
-
-            thumbnails.forEach(thumbnail => {
-                thumbnail.addEventListener('click', () => {
-                    thumbnails.forEach(t => t.classList.remove('active'));
-                    thumbnail.classList.add('active');
-                    mainImage.src = thumbnail.dataset.src;
-                    mainImage.alt = thumbnail.alt;
-                });
-            });
-        });
-    }
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('theme-toggle-switch');
+    themeToggle.addEventListener('change', function() {
+        if (this.checked) {
+            document.body.setAttribute('data-theme', 'dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.body.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+    });
 });
