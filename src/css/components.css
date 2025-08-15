@@ -166,5 +166,28 @@ h1, h2, h3 {
     .banner-fullscreen h1 { font-size: 2rem; }
     .banner-fullscreen p { font-size: 1rem; }
     .process-steps { flex-direction: column; }
+    .team-section .section-title,
+    .process-section .section-title,
+    .gallery-section .section-title,
+    .features-section .section-title,
+    .testimonial-section .section-title {
+        margin-bottom: 30px;
+    }
+    .faq-section .section-title {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
 }
 /* --- END: RESPONSIVE STYLES --- */
+
+/* --- START: PARAGRAPH SECTION --- */
+.paragraph-section {
+    padding: 60px 0;
+}
+.paragraph-section h2 {
+    margin-bottom: 20px;
+}
+.paragraph-section p + p {
+    margin-top: 15px;
+}
+/* --- END: PARAGRAPH SECTION --- */

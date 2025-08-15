@@ -52,6 +52,10 @@ document.addEventListener('DOMContentLoaded', function() {
         'footer': {
             title: 'Footer',
             practices: `<ul><li>Keep disclaimer text concise. Link to full policies like "Terms of Service" or "Privacy Policy".</li><li>The logo is a styled SVG, ensuring it always loads and looks correct.</li></ul>`
+        },
+        'paragraph': {
+            title: 'Paragraph',
+            practices: `<ul><li>For basic text content. Use as many paragraphs as needed.</li></ul>`
         }
     };
 
@@ -185,11 +189,11 @@ ${componentStyles}
             e.preventDefault();
             const targetId = this.getAttribute('href').substring(1);
 
-            const componentKey = Object.keys(components).find(key => targetId.startsWith(key.split('-')[0]));
-            if (!componentKey) return;
-
-            const viewer = document.getElementById(componentKey);
-            if (!viewer) return;
+            const viewer = document.getElementById(targetId);
+            if (!viewer) {
+                console.error(`No viewer found for id: ${targetId}`);
+                return;
+            }
 
             welcomeMessage.style.display = 'none';
             viewers.forEach(v => v.classList.remove('active'));
@@ -198,6 +202,10 @@ ${componentStyles}
             this.classList.add('active');
 
             const componentData = components[targetId];
+            if (!componentData) {
+                console.error(`No component data found for id: ${targetId}`);
+                return;
+            }
 
             try {
                 const response = await fetch(`src/components/${targetId}.html`);
